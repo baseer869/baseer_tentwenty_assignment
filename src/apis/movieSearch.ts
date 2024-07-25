@@ -1,0 +1,30 @@
+import axios, { AxiosRequestConfig } from 'axios';
+
+export type Movie = {
+  id: string;
+  title: string;
+  image: string;
+  description: string;
+};
+
+const API_URL = 'https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US';
+export const ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMWM0ZjE3MmI1ZDBlZTI3YzMyOTYzNTRmNmIxNjM0MyIsIm5iZiI6MTcyMTc2MjY0My45MDU3MzEsInN1YiI6IjY2YTAwMGI5MTI3YzVjYTI1ZDZjZDZkNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ckK58a6ORrOVuubuNp_HuYSjVIeThN29QdetAEgq87I";
+
+export const movieSearch = async (query): Promise<Movie[]> => {
+  const options: AxiosRequestConfig = {
+    url: `${API_URL}&query=${query}`,
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+    },
+  };
+  console.log(options);
+  
+  try {
+    const result = await axios.request(options);
+    return result.data.results as Movie[];
+  } catch (error: any) {
+    console.error('Error fetching movies: ', error.message);
+    return Promise.reject(error);
+  }
+};
